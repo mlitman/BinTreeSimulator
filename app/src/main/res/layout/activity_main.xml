@@ -29,6 +29,13 @@
             android:onClick="addButtonPressed"
             android:text="Add To Tree" />
 
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="inOrderTraverseButtonPressed"
+            android:text="Visit In-Order" />
+
         <LinearLayout
             android:id="@+id/theTree"
             android:layout_width="match_parent"

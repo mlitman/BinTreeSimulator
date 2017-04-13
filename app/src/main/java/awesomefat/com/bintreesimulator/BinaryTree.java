@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
+
 /**
  * Created by michaellitman on 4/6/17.
  */
@@ -12,6 +15,8 @@ public class BinaryTree
 {
     public boolean isSet;
     private int payload;
+    private char position;
+    private int depth;
     private ViewGroup theTreeView;
     private Context context;
     private BinaryTree leftTree;
@@ -21,21 +26,39 @@ public class BinaryTree
     {
         this.theTreeView = theTreeView;
         this.isSet = false;
+        this.depth = 0;
+        this.position = 'M';
         this.leftTree = null;
         this.rightTree = null;
+        this.context = context;
     }
 
-    public BinaryTree(int payload, ViewGroup theTreeView, Context context)
+    public BinaryTree(int payload, int depth, char position, ViewGroup theTreeView, Context context)
     {
         this(theTreeView, context);
         this.payload = payload;
+        this.depth = depth;
+        this.position = position;
         this.isSet = true;
     }
 
-    private void addTextViewToTree(int payload)
+    public void visitInOrder()
+    {
+        if(this.leftTree != null)
+        {
+            this.leftTree.visitInOrder();
+        }
+        Core.theQ.addLast("" + this.payload);
+        if(this.rightTree != null)
+        {
+            this.rightTree.visitInOrder();
+        }
+    }
+
+    private void addTextViewToTree(String lexJSON)
     {
         TextView tv = new TextView(this.context);
-        tv.setText("" + payload);
+        tv.setText(lexJSON);
         this.theTreeView.addView(tv);
     }
 
@@ -44,7 +67,7 @@ public class BinaryTree
         if(!this.isSet)
         {
             this.payload = payload;
-            this.addTextViewToTree(payload);
+            this.addTextViewToTree(this.toLexicalJSON());
             this.isSet = true;
             return true;
         }
@@ -55,8 +78,8 @@ public class BinaryTree
                 //add this payload to the left
                 if(this.leftTree == null)
                 {
-                    this.leftTree = new BinaryTree(payload, theTreeView, this.context);
-                    this.addTextViewToTree(payload);
+                    this.leftTree = new BinaryTree(payload, this.depth+1, 'L', theTreeView, this.context);
+                    this.addTextViewToTree(this.leftTree.toLexicalJSON());
                     return true;
                 }
                 else
@@ -71,8 +94,8 @@ public class BinaryTree
                 //add this payload to the right
                 if(this.rightTree == null)
                 {
-                    this.rightTree = new BinaryTree(payload, this.theTreeView, this.context);
-                    this.addTextViewToTree(payload);
+                    this.rightTree = new BinaryTree(payload, this.depth+1, 'R', this.theTreeView, this.context);
+                    this.addTextViewToTree(this.rightTree.toLexicalJSON());
                     return true;
                 }
                 else
@@ -83,6 +106,12 @@ public class BinaryTree
                 }
             }
         }
+    }
+
+    private String toLexicalJSON()
+    {
+        String json = "{\"depth\":" + this.depth + ", \"position\":\"" + this.position + "\", \"payload\":" + this.payload + "}";
+        return json;
     }
 
     public void display()

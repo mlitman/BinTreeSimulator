@@ -42,6 +42,46 @@ public class BinaryTree
         this.isSet = true;
     }
 
+    public boolean isOutOfBalance()
+    {
+        int leftDepth = 0;
+        int rightDepth = 0;
+        if(this.leftTree != null)
+        {
+            leftDepth = this.leftTree.getDepth();
+        }
+        if(this.rightTree != null)
+        {
+            rightDepth = this.rightTree.getDepth();
+        }
+
+        int difference = Math.abs(leftDepth - rightDepth);
+        return difference > 1;
+    }
+
+    public int getDepth()
+    {
+        int leftDepth = 0;
+        int rightDepth = 0;
+        if(this.leftTree != null)
+        {
+            leftDepth = 1 + this.leftTree.getDepth();
+        }
+        if(this.rightTree != null)
+        {
+            rightDepth = 1 + this.rightTree.getDepth();
+        }
+
+        if(rightDepth > leftDepth)
+        {
+            return rightDepth;
+        }
+        else
+        {
+            return leftDepth;
+        }
+    }
+
     public void visitInOrder()
     {
         if(this.leftTree != null)

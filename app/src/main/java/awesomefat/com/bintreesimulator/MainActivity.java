@@ -38,4 +38,9 @@ public class MainActivity extends AppCompatActivity {
         }
         System.out.println("");
     }
+
+    public void getDepthButtonPressed(View v)
+    {
+        System.out.println("Depth: " + this.bt.getDepth());
+    }
 }
